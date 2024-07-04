@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
 
@@ -22,6 +23,20 @@ class MyApp extends StatelessWidget {
 
   final bool isIntroDone;
 
+  ThemeData _buildTheme(isDarkMode) {
+    var baseTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.deepPurple,
+        brightness: isDarkMode ? Brightness.dark : Brightness.light,
+      ),
+      useMaterial3: true,
+    );
+
+    return baseTheme.copyWith(
+      textTheme: GoogleFonts.notoSansArabicTextTheme(baseTheme.textTheme),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<SettingDBModel>>(
@@ -39,13 +54,7 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             title: 'ليا انا',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.deepPurple,
-                brightness: isDarkMode ? Brightness.dark : Brightness.light,
-              ),
-              useMaterial3: true,
-            ),
+            theme: _buildTheme(isDarkMode),
             initialRoute: isIntroDone ? "/" : "/intro",
             routes: {
               '/': (context) => const MainScreen(),

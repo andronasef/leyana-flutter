@@ -22,6 +22,7 @@ dependencies:
   dio_cache_interceptor: ^3.5.0
   dio_cache_interceptor_file_store: ^1.2.3
   share_plus: ^9.0.0
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
