@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
 
 import 'package:leyana/ui/screens/intro/intro_screen.dart';
@@ -8,10 +9,8 @@ import 'package:leyana/ui/screens/main/main_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final isIntroDone =
-      await SettingsManager.getSetting(SettingName.isIntroDone) == "true"
-          ? true
-          : false;
+  final bool isIntroDone =
+      await SettingsManager.getSetting(SettingName.isIntroDone) == "true";
 
   runApp(MyApp(
     isIntroDone: isIntroDone,
@@ -25,27 +24,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      supportedLocales: const [
-        Locale('ar'), // English
-      ],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      title: 'ليا انا',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-        ),
-        useMaterial3: true,
-      ),
-      initialRoute: isIntroDone ? "/" : "/intro",
-      routes: {
-        '/': (context) => const MainScreen(),
-        '/intro': (context) => const IntroScreen(),
-      },
-    );
+    return StreamBuilder<List<SettingDBModel>>(
+        stream: SettingsManager.listenToSetting(SettingName.isDarkMode),
+        builder: (context, snapshot) {
+          final bool isDarkMode = snapshot.data?.firstOrNull?.value == "true";
+
+          return MaterialApp(
+            supportedLocales: const [
+              Locale('ar'), // English
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            title: 'ليا انا',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepPurple,
+                brightness: isDarkMode ? Brightness.dark : Brightness.light,
+              ),
+              useMaterial3: true,
+            ),
+            initialRoute: isIntroDone ? "/" : "/intro",
+            routes: {
+              '/': (context) => const MainScreen(),
+              '/intro': (context) => const IntroScreen(),
+            },
+          );
+        });
   }
 }

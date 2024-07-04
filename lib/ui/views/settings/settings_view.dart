@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:leyana/models/setting_db_model.dart';
+import 'package:leyana/services/managers/settings_manager.dart';
 import 'package:leyana/ui/views/settings/widgets/settings_section_title.dart';
 
 class SettingsView extends StatelessWidget {
@@ -14,17 +16,21 @@ class SettingsView extends StatelessWidget {
           SettingsSectionTitle("الاعدادات الرئيسية"),
           SizedBox(height: 8),
           Material(
-            child: SwitchListTile(
-              value: false,
-              title: Text(
-                "الوضع الليلي",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              onChanged: (value) {
-                // ignore: avoid_print
-                print(value);
-              },
-            ),
+            child: StreamBuilder<List<SettingDBModel>>(
+                stream: SettingsManager.listenToSetting(SettingName.isDarkMode),
+                builder: (context, snapshot) {
+                  final bool isDarkMode =
+                      snapshot.data?.firstOrNull?.value == "true";
+                  return SwitchListTile(
+                    value: isDarkMode,
+                    title: Text("الوضع الليلي",
+                        style: Theme.of(context).textTheme.titleMedium),
+                    onChanged: (value) async {
+                      await SettingsManager.setSetting(
+                          SettingName.isDarkMode, value.toString());
+                    },
+                  );
+                }),
           ),
           Material(
               child: ListTile(

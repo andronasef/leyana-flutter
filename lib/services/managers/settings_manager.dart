@@ -3,7 +3,7 @@ import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/database_service.dart';
 
 class SettingsManager {
-  static void setSetting<T>(SettingName name, String value) async {
+  static Future<void> setSetting<T>(SettingName name, String value) async {
     if (!(await DatabaseService.getInstance()).isOpen) return;
 
     final setting = SettingDBModel()
@@ -27,6 +27,15 @@ class SettingsManager {
 
     return setting?.value ?? '';
   }
+
+  static Stream<List<SettingDBModel>> listenToSetting(SettingName name) async* {
+    yield* (await DatabaseService.getInstance())
+        .settingDBModels
+        .where()
+        .filter()
+        .nameEqualTo(name.toString())
+        .watch(fireImmediately: true);
+  }
 }
 
-enum SettingName { isIntroDone, name, isMale, userUniqueNumber }
+enum SettingName { isIntroDone, name, isMale, userUniqueNumber, isDarkMode }

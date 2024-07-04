@@ -1,6 +1,4 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:leyana/models/verse_db_model.dart';
 import 'package:leyana/services/managers/favorite_verses_manager.dart';
 import 'package:leyana/ui/widgets/verse.dart';
 
