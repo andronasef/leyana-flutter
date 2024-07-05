@@ -35,8 +35,12 @@ class VersesManager {
 
     if (bioVerse.length == 2) {
       finalVerse = isMale ? bioVerse[0] : bioVerse[1];
+    } else {
+      // If Verse is Unisex
+      finalVerse = verse;
     }
 
+    // Replace Name Placeholder with Real Name
     finalVerse = finalVerse.replaceAll("<الاسم>", name);
 
     return finalVerse;
