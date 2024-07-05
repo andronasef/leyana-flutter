@@ -19,6 +19,7 @@ class _FavoritesViewState extends State<FavoritesView> {
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
       child: Column(
         children: [
+          // TODO: Implement Search
           // SearchBar(
           //   leading: const Icon(Icons.search),
           //   controller: _searchController,

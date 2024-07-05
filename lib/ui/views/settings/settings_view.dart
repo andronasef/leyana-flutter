@@ -32,19 +32,20 @@ class SettingsView extends StatelessWidget {
                   );
                 }),
           ),
-          Material(
-              child: ListTile(
-            title: Text(
-              "معاد التنبيه اليومي",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            trailing: Text(
-              "8:00 AM",
-              textDirection: TextDirection.ltr,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            onTap: () {},
-          )),
+          // TODO: Implement Local Notifications
+          // Material(
+          //     child: ListTile(
+          //   title: Text(
+          //     "معاد التنبيه اليومي",
+          //     style: Theme.of(context).textTheme.titleMedium,
+          //   ),
+          //   trailing: Text(
+          //     "8:00 AM",
+          //     textDirection: TextDirection.ltr,
+          //     style: Theme.of(context).textTheme.titleMedium,
+          //   ),
+          //   onTap: () {},
+          // )),
           SizedBox(height: 16),
           SettingsSectionTitle("المزيد"),
           SizedBox(height: 8),
