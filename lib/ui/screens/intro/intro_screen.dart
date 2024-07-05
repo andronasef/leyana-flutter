@@ -82,7 +82,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         return;
                       }
                       await SettingsManager.setSetting(
-                          SettingName.name, _nameField.text);
+                          SettingName.name, _nameField.text.trim());
                       await SettingsManager.setSetting(
                           SettingName.isMale, _isMale.toString());
                       await SettingsManager.setSetting(
