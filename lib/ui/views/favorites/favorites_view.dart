@@ -11,7 +11,6 @@ class FavoritesView extends StatefulWidget {
 
 class _FavoritesViewState extends State<FavoritesView> {
   final TextEditingController _searchController = TextEditingController();
-  final int versesLength = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +39,8 @@ class _FavoritesViewState extends State<FavoritesView> {
                 if (verses.data!.isEmpty) {
                   return const Center(child: Text('لا توجد ايات مفضلة'));
                 }
+
+                final int versesLength = verses.data!.length - 1;
 
                 return ListView.separated(
                   separatorBuilder: (context, index) => const SizedBox(
