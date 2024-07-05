@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   ThemeData _buildTheme(isDarkMode) {
     var baseTheme = ThemeData(
       colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
+        seedColor: Colors.orangeAccent,
         brightness: isDarkMode ? Brightness.dark : Brightness.light,
       ),
       useMaterial3: true,
