@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:leyana/core/values.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
+import 'package:leyana/ui/views/settings/widgets/setting_list_item.dart';
 import 'package:leyana/ui/views/settings/widgets/settings_section_title.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -52,54 +55,37 @@ class SettingsView extends StatelessWidget {
           const SettingLinkItem(
             text: "قيم التطبيق",
             icon: Icons.star,
-            link: "",
+            link: AppUrls.rate,
           ),
-          const SettingLinkItem(
+          SettingLinkItem(
             text: "شارك التطبيق",
             icon: Icons.share,
-            link: "",
+            action: () async {
+              Share.share(AppUrls.share);
+            },
           ),
           const SettingLinkItem(
             text: "اطلب ميزة جديدة",
             icon: Icons.emoji_objects,
-            link: "",
+            link: AppUrls.support,
+          ),
+          const SettingLinkItem(
+            text: "بلغ عن مشكلة",
+            icon: Icons.error,
+            link: AppUrls.support,
           ),
           const SettingLinkItem(
             text: "سياسة الخصوصية",
             icon: Icons.privacy_tip,
-            link: "",
+            link: AppUrls.privacy,
           ),
           const SettingLinkItem(
             text: "اتواصل معانا",
             icon: Icons.phone,
-            link: "",
+            link: AppUrls.contact,
           ),
         ],
       ),
     );
-  }
-}
-
-class SettingLinkItem extends StatelessWidget {
-  const SettingLinkItem(
-      {super.key, required this.icon, required this.text, required this.link});
-
-  final IconData icon;
-  final String text;
-  final String link;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-        child: ListTile(
-      title: Text(
-        text,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      trailing: Icon(icon),
-      onTap: () {
-        // launchUrl(_url)) using url_launcher
-      },
-    ));
   }
 }
