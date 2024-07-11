@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:leyana/types/schedule_notification_props.dart';
+
 const kAppPackageName = "";
 
 class AppUrls {
@@ -12,4 +15,20 @@ class AppUrls {
       "https://realincrease.github.io/apps-privacy-policy/leyana";
 
   static get kAppShortname => kAppPackageName;
+}
+
+class LocalNotifysList {
+  static final DAILY_NOTIFICATION = ScheduleNotificationProps(
+    id: 0,
+    title: "ليك انت",
+    body: "ادخل اقرا ايه النهارده واتشجع 💖",
+    scheduledDate: DateTime(0, 0, 0, 9, 0, 0),
+  );
+  static ScheduleNotificationProps customDailyNotification(TimeOfDay time) =>
+      ScheduleNotificationProps(
+        id: 0,
+        title: "ليك انت",
+        body: "ادخل اقرا ايه النهارده واتشجع 💖",
+        scheduledDate: DateTime(0, 0, 0, time.hour, time.minute, 0),
+      );
 }

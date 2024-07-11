@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:leyana/core/values.dart';
+import 'package:leyana/services/local_notify_service.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
+import 'package:leyana/utils/logger.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -11,6 +14,28 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   bool _isMale = true;
   final TextEditingController _nameField = TextEditingController();
+
+  void onContinuePressed() async {
+    try {
+      logger.d("Continue Pressed");
+      if (_nameField.text.isEmpty) {
+        logger.d("Name is Empty");
+        return;
+      }
+      await SettingsManager.setSetting(
+          SettingName.name, _nameField.text.trim());
+      await SettingsManager.setSetting(SettingName.isMale, _isMale.toString());
+      await SettingsManager.setSetting(
+          SettingName.userUniqueNumber, DateTime.now().microsecond.toString());
+      await LocalNotifyService.scheduleNotification(
+          props: LocalNotifysList.DAILY_NOTIFICATION);
+
+      await SettingsManager.setSetting(SettingName.isIntroDone, "true");
+      if (mounted) Navigator.of(context).popAndPushNamed("/");
+    } on Exception catch (e) {
+      logger.e(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,31 +100,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
                 const SizedBox(height: 24),
                 FilledButton(
-                  onPressed: () async {
-                    // Save the name and gender to the database
-                    try {
-                      if (_nameField.text.isEmpty) {
-                        return;
-                      }
-                      await SettingsManager.setSetting(
-                          SettingName.name, _nameField.text.trim());
-                      await SettingsManager.setSetting(
-                          SettingName.isMale, _isMale.toString());
-                      await SettingsManager.setSetting(
-                          SettingName.userUniqueNumber,
-                          DateTime.now().toString());
-                      await SettingsManager.setSetting(
-                          SettingName.userUniqueNumber,
-                          DateTime.now().microsecond.toString());
-                    } on Exception catch (e) {
-                      // TODO
-                    }
-
-                    await SettingsManager.setSetting(
-                        SettingName.isIntroDone, "true");
-
-                    Navigator.of(context).popAndPushNamed("/");
-                  },
+                  onPressed: onContinuePressed,
                   child: const Text("اتفضل"),
                 )
               ],
