@@ -8,9 +8,14 @@ class VersesManager {
     final userUniqueNumber = int.parse(
         await SettingsManager.getSetting(SettingName.userUniqueNumber));
 
-    final randomIndex =
-        (DateTime.now().day * userUniqueNumber) % versesList.length;
+    final currentTime = DateTime.now();
+    final randomDateNum =
+        currentTime.day * currentTime.month * currentTime.year;
+
+    final randomIndex = (userUniqueNumber * randomDateNum) % versesList.length;
+
     final verse = versesList[randomIndex];
+
     return verse;
   }
 
