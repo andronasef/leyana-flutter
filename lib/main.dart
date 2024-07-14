@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
-
+import 'package:device_preview/device_preview.dart';
 import 'package:leyana/ui/screens/intro/intro_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leyana/ui/screens/main/main_screen.dart';
+import 'package:device_preview_screenshot/device_preview_screenshot.dart';
+import 'package:leyana/utils/logger.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,8 +19,19 @@ void main() async {
   final bool isIntroDone =
       await SettingsManager.getSetting(SettingName.isIntroDone) == "true";
 
-  runApp(MyApp(
-    isIntroDone: isIntroDone,
+  final Directory directory = (await getDownloadsDirectory())!;
+  logger.i("Directory Path: ${directory.path}");
+  runApp(DevicePreview(
+    enabled: !kReleaseMode,
+    tools: [
+      ...DevicePreview.defaultTools,
+      DevicePreviewScreenshot(
+          multipleScreenshots: true,
+          onScreenshot: screenshotAsFiles(directory)),
+    ],
+    builder: (context) => MyApp(
+      isIntroDone: isIntroDone,
+    ),
   ));
 }
 
@@ -45,6 +62,9 @@ class MyApp extends StatelessWidget {
           final bool isDarkMode = snapshot.data?.firstOrNull?.value == "true";
 
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
             supportedLocales: const [
               Locale('ar'), // English
             ],
