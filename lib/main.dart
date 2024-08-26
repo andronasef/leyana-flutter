@@ -8,7 +8,6 @@ import 'package:leyana/bloc/cubit/verse/verse_cubit.dart';
 import 'package:leyana/core/values.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:leyana/ui/screens/intro/intro_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leyana/ui/screens/main/main_screen.dart';
@@ -22,6 +21,10 @@ void main() async {
   final bool isIntroDone =
       await SettingsManager.getSetting(SettingName.isIntroDone) == "true";
 
+  // check dark mode (from db or system)
+  final SettingDBModel isDarkModelInitial =
+      await SettingsManager.getIsDarkModelInitial();
+
   final Directory directory = (await getDownloadsDirectory())!;
   logger.i("Directory Path: ${directory.path}");
   runApp(DevicePreview(
@@ -34,14 +37,17 @@ void main() async {
     ],
     builder: (context) => MyApp(
       isIntroDone: isIntroDone,
+      isDarkModelInitial: isDarkModelInitial,
     ),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.isIntroDone});
+  const MyApp(
+      {super.key, required this.isIntroDone, required this.isDarkModelInitial});
 
   final bool isIntroDone;
+  final SettingDBModel isDarkModelInitial;
 
   ThemeData _buildTheme(isDarkMode) {
     var baseTheme = ThemeData(
@@ -67,6 +73,7 @@ class MyApp extends StatelessWidget {
       ],
       child: StreamBuilder<List<SettingDBModel>>(
           stream: SettingsManager.listenToSetting(SettingName.isDarkMode),
+          initialData: [isDarkModelInitial],
           builder: (context, snapshot) {
             final bool isDarkMode = snapshot.data?.firstOrNull?.value == "true";
 

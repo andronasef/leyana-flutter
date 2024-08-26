@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:isar/isar.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/database_service.dart';
@@ -24,7 +26,7 @@ class SettingsManager {
     }
   }
 
-  static Future<String> getSetting(SettingName name) async {
+  static Future<String?> getSetting(SettingName name) async {
     try {
       logger.i('Trying to get Setting $name');
       if (!(await DatabaseService.getInstance()).isOpen) return '';
@@ -36,11 +38,11 @@ class SettingsManager {
           .nameEqualTo(name.toString())
           .findFirst();
 
-      return setting?.value ?? '';
+      return setting?.value;
     } on Exception catch (e) {
       logger.e(e);
     }
-    return '';
+    return null;
   }
 
   static Stream<List<SettingDBModel>> listenToSetting(SettingName name) async* {
@@ -55,6 +57,28 @@ class SettingsManager {
     } on Exception catch (e) {
       logger.e(e);
     }
+  }
+
+  static Future<SettingDBModel> getIsDarkModelInitial() async {
+    final String? isDarkModeInDB =
+        await SettingsManager.getSetting(SettingName.isDarkMode);
+
+    if (isDarkModeInDB == null) {
+      final systemBrightness =
+          WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      final bool isSystemDarkMode = systemBrightness == Brightness.dark;
+
+      SettingsManager.setSetting(
+          SettingName.isDarkMode, isSystemDarkMode.toString());
+    }
+    final bool isDarkMode =
+        await SettingsManager.getSetting(SettingName.isDarkMode) == "true";
+
+    final SettingDBModel isDarkModelInitial = SettingDBModel()
+      ..name = SettingName.isDarkMode.toString()
+      ..value = isDarkMode.toString();
+
+    return isDarkModelInitial;
   }
 }
 

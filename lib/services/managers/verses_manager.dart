@@ -13,8 +13,14 @@ class VersesManager {
       return right(Failure(
           "لم يتم العثور على الآيات بسبب الانترتت برجاء اغلاق الابليكيشن والتاكد من وجود الانترنت"));
 
-    final userUniqueNumber = int.parse(
-        await SettingsManager.getSetting(SettingName.userUniqueNumber));
+    final userUniqueString =
+        await SettingsManager.getSetting(SettingName.userUniqueNumber);
+
+    if (userUniqueString == null)
+      return right(Failure(
+          "لم يتم العثور على الرقم الخاص بك برجاء اعادة تشغيل التطبيق"));
+
+    final userUniqueNumber = int.parse(userUniqueString);
 
     final currentTime = DateTime.now();
     final randomDateNum =
@@ -27,10 +33,15 @@ class VersesManager {
     final praseVerseCurrentUser =
         await VersesManager.praseVerseCurrentUser(verse);
 
+    if (praseVerseCurrentUser == null) {
+      return right(
+          Failure("حدثت مشكلة اثناء تحميل الآية برجاء اعادة تشغيل التطبيق"));
+    }
+
     return left(praseVerseCurrentUser);
   }
 
-  static Future<VerseDBModel> praseVerseCurrentUser(
+  static Future<VerseDBModel?> praseVerseCurrentUser(
       VerseDBModel verseModel) async {
     final bool isMale =
         (await SettingsManager.getSetting(SettingName.isMale)) == "true"
@@ -38,7 +49,10 @@ class VersesManager {
             : false;
 
     // Replace Name Placeholder with Real Name
-    final name = await SettingsManager.getSetting(SettingName.name);
+    String? name = await SettingsManager.getSetting(SettingName.name);
+
+    if (name == null) return null;
+
     verseModel.verse = await praseVerse(verseModel.verse, isMale, name);
 
     return verseModel;
