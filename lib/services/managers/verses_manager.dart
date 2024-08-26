@@ -15,11 +15,14 @@ class VersesManager {
     final randomIndex = (userUniqueNumber * randomDateNum) % versesList.length;
 
     final verse = versesList[randomIndex];
+    final praseVerseCurrentUser =
+        await VersesManager.praseVerseCurrentUser(verse);
 
-    return verse;
+    return praseVerseCurrentUser;
   }
 
-  static Future<String> praseVerseCurrentUser(VerseDBModel verseModel) async {
+  static Future<VerseDBModel> praseVerseCurrentUser(
+      VerseDBModel verseModel) async {
     final bool isMale =
         (await SettingsManager.getSetting(SettingName.isMale)) == "true"
             ? true
@@ -27,8 +30,9 @@ class VersesManager {
 
     // Replace Name Placeholder with Real Name
     final name = await SettingsManager.getSetting(SettingName.name);
+    verseModel.verse = await praseVerse(verseModel.verse, isMale, name);
 
-    return praseVerse(verseModel.verse, isMale, name);
+    return verseModel;
   }
 
   static Future<String> praseVerse(
@@ -48,7 +52,7 @@ class VersesManager {
     // Replace Name Placeholder with Real Name
     finalVerse = finalVerse.replaceAll("<الاسم>", name);
 
-    return finalVerse;
+    return finalVerse.trim();
   }
 
   static Future<List<VerseDBModel>> getVerses() async {
