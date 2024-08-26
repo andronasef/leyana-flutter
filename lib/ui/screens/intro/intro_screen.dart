@@ -25,8 +25,9 @@ class _IntroScreenState extends State<IntroScreen> {
       await SettingsManager.setSetting(
           SettingName.name, _nameField.text.trim());
       await SettingsManager.setSetting(SettingName.isMale, _isMale.toString());
-      await SettingsManager.setSetting(
-          SettingName.userUniqueNumber, DateTime.now().microsecond.toString());
+
+      await SettingsManager.setSetting(SettingName.userUniqueNumber,
+          (Random().nextInt(9999) + 1).toString());
       await LocalNotifyService.scheduleNotification(
           props: LocalNotifysList.DAILY_NOTIFICATION);
 
