@@ -11,19 +11,16 @@ class VerseCubit extends Cubit<VerseState> {
   Future<void> loadVerse() async {
     try {
       emit(VerseLoading());
-      // Simulate a delay for loading data
       await Future.delayed(const Duration(seconds: 2));
 
-      // Fetch verses from your database or API
-      VerseDBModel randomVerse = await fetchVerseOnlineOrOffline();
+      final randomVerse = await VersesManager.getTodayRandomVerse();
 
-      emit(VerseLoaded(randomVerse));
+      randomVerse.fold(
+        (verse) => emit(VerseLoaded(verse)),
+        (error) => emit(VerseError(error.message)),
+      );
     } catch (e) {
-      emit(VerseError(e.toString()));
+      emit(VerseError("حدث خطأ ما برجاء المحاولة مرة أخرى"));
     }
   }
-}
-
-Future<VerseDBModel> fetchVerseOnlineOrOffline() async {
-  return await VersesManager.getTodayRandomVerse();
 }

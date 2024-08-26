@@ -1,10 +1,18 @@
+import 'package:dio/dio.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:leyana/core/errors/failure.dart';
 import 'package:leyana/services/dio_services.dart';
 import 'package:leyana/models/verse_db_model.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
 
 class VersesManager {
-  static Future<VerseDBModel> getTodayRandomVerse() async {
+  static Future<Either<VerseDBModel, Failure>> getTodayRandomVerse() async {
     final versesList = await VersesManager.getVerses();
+
+    if (versesList.isEmpty)
+      return right(Failure(
+          "لم يتم العثور على الآيات بسبب الانترتت برجاء اغلاق الابليكيشن والتاكد من وجود الانترنت"));
+
     final userUniqueNumber = int.parse(
         await SettingsManager.getSetting(SettingName.userUniqueNumber));
 
@@ -15,10 +23,11 @@ class VersesManager {
     final randomIndex = (userUniqueNumber * randomDateNum) % versesList.length;
 
     final verse = versesList[randomIndex];
+
     final praseVerseCurrentUser =
         await VersesManager.praseVerseCurrentUser(verse);
 
-    return praseVerseCurrentUser;
+    return left(praseVerseCurrentUser);
   }
 
   static Future<VerseDBModel> praseVerseCurrentUser(
@@ -56,13 +65,18 @@ class VersesManager {
   }
 
   static Future<List<VerseDBModel>> getVerses() async {
-    final List versesList = (await (await DioService.getInstance())
-            .get('https://leyaana.pages.dev/verses.json'))
-        .data;
-    return versesList
-        .map((verse) => VerseDBModel()
-          ..verse = verse["verse"]
-          ..realId = verse["_id"])
-        .toList();
+    try {
+      final Response verseRes = (await (await DioService.getInstance())
+          .get('https://leyaana.pages.dev/verses.json'));
+
+      final List versesList = verseRes.data;
+      return versesList
+          .map((verse) => VerseDBModel()
+            ..verse = verse["verse"]
+            ..realId = verse["_id"])
+          .toList();
+    } on Exception catch (e) {
+      return [];
+    }
   }
 }
