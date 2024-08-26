@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:leyana/core/values.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
 import 'package:device_preview/device_preview.dart';
@@ -22,7 +23,7 @@ void main() async {
   final Directory directory = (await getDownloadsDirectory())!;
   logger.i("Directory Path: ${directory.path}");
   runApp(DevicePreview(
-    enabled: !kReleaseMode,
+    enabled: !kReleaseMode && Config.kIsDevicePreview,
     tools: [
       ...DevicePreview.defaultTools,
       DevicePreviewScreenshot(

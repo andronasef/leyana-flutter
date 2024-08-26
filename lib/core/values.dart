@@ -3,6 +3,10 @@ import 'package:leyana/types/schedule_notification_props.dart';
 
 const kAppPackageName = "";
 
+class Config {
+  static const kIsDevicePreview = false;
+}
+
 class AppUrls {
   static const String contact = "mailto:andronasef@gmail.com";
   static const String rate = "market://details?id=com.increase.leyana";
