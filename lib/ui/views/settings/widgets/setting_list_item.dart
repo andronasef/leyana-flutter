@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:leyana/utils/url_launcher.dart';
 
 class SettingLinkItem extends StatelessWidget {
   const SettingLinkItem(
@@ -24,14 +24,9 @@ class SettingLinkItem extends StatelessWidget {
       ),
       trailing: Icon(icon),
       onTap: () async {
-        if (link != null &&
-            link!.isNotEmpty &&
-            await canLaunchUrlString(link!)) {
-          await launchUrlString(link!);
-        }
-        if (action != null) {
-          action!();
-        }
+        if (link != null) launchUrl(link!, context);
+
+        if (action != null) action!();
       },
     ));
   }
