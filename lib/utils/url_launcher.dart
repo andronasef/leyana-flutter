@@ -4,16 +4,10 @@ import 'package:leyana/utils/snackbar.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 void launchUrl(String link, BuildContext context) async {
-  if (link.isEmpty) {
-    logger.e('Link is empty');
-    return;
+  try {
+    await launchUrlString(link);
+  } catch (e) {
+    logger.e('Error launching link: $e');
+    if (context.mounted) showSnackbar(context, "حدث خطأ أثناء فتح الرابط");
   }
-
-  if (!await canLaunchUrlString(link)) {
-    logger.e('Link is not valid / cannot be launched');
-    if (context.mounted) showSnackbar(context, "لا يمكن فتح الرابط");
-    return;
-  }
-
-  await launchUrlString(link);
 }
