@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:leyana/core/errors/failure.dart';
@@ -9,24 +11,12 @@ class VersesManager {
   static Future<Either<VerseDBModel, Failure>> getTodayRandomVerse() async {
     final versesList = await VersesManager.getVerses();
 
-    if (versesList.isEmpty)
+    if (versesList.isEmpty) {
       return right(Failure(
           "لم يتم العثور على الآيات بسبب الانترتت برجاء اغلاق الابليكيشن والتاكد من وجود الانترنت"));
+    }
 
-    final userUniqueString =
-        await SettingsManager.getSetting(SettingName.userUniqueNumber);
-
-    if (userUniqueString == null)
-      return right(Failure(
-          "لم يتم العثور على الرقم الخاص بك برجاء اعادة تشغيل التطبيق"));
-
-    final userUniqueNumber = int.parse(userUniqueString);
-
-    final currentTime = DateTime.now();
-    final randomDateNum =
-        currentTime.day * currentTime.month * currentTime.year;
-
-    final randomIndex = (userUniqueNumber * randomDateNum) % versesList.length;
+    final randomIndex = Random().nextInt(versesList.length);
 
     final verse = versesList[randomIndex];
 

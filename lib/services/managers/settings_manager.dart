@@ -82,11 +82,4 @@ class SettingsManager {
   }
 }
 
-enum SettingName {
-  isIntroDone,
-  name,
-  isMale,
-  userUniqueNumber,
-  isDarkMode,
-  notificationTime
-}
+enum SettingName { isIntroDone, name, isMale, isDarkMode, notificationTime }

@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leyana/core/values.dart';
@@ -30,8 +28,6 @@ class _IntroScreenState extends State<IntroScreen> {
           SettingName.name, _nameField.text.trim());
       await SettingsManager.setSetting(SettingName.isMale, _isMale.toString());
 
-      await SettingsManager.setSetting(SettingName.userUniqueNumber,
-          (Random().nextInt(9999) + 1).toString());
       await LocalNotifyService.scheduleNotification(
           props: LocalNotifysList.DAILY_NOTIFICATION);
 
