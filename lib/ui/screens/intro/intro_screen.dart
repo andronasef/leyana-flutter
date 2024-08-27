@@ -5,6 +5,7 @@ import 'package:leyana/core/values.dart';
 import 'package:leyana/services/local_notify_service.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
 import 'package:leyana/utils/logger.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -43,7 +44,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) => didPop ? exit(0) : null,
+      onPopInvoked: (didPop) => didPop ? FlutterExitApp.exitApp() : null,
       child: SafeArea(
         child: Scaffold(
           body: Padding(
