@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:leyana/core/values.dart';
 import 'package:leyana/services/local_notify_service.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
@@ -35,7 +36,9 @@ class _IntroScreenState extends State<IntroScreen> {
           props: LocalNotifysList.DAILY_NOTIFICATION);
 
       await SettingsManager.setSetting(SettingName.isIntroDone, "true");
-      if (mounted) Navigator.of(context).popAndPushNamed("/");
+      if (mounted) {
+        context.go('/homepage');
+      }
     } on Exception catch (e) {
       logger.e(e);
     }
