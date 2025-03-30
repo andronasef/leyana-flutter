@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.isDarkModelInitial});
 
   final SettingDBModel isDarkModelInitial;
+  final bool _isInitialized = false;
 
   ThemeData _buildTheme(isDarkMode) {
     var baseTheme = ThemeData(
@@ -68,29 +69,40 @@ class MyApp extends StatelessWidget {
             create: (context) => GodNameCubit(),
           ),
         ],
-        child: StreamBuilder<List<SettingDBModel>>(
-            stream: SettingsManager.listenToSetting(SettingName.isDarkMode),
-            initialData: [isDarkModelInitial],
-            builder: (context, snapshot) {
-              final bool isDarkMode =
-                  snapshot.data?.firstOrNull?.value == "true";
+        child: Builder(
+          builder: (context) {
+            // Initialize data once
+            if (!_isInitialized) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.read<VerseCubit>().loadVerse();
+                context.read<GodNameCubit>().loadRandomName();
+              });
+            }
+            return StreamBuilder<List<SettingDBModel>>(
+                stream: SettingsManager.listenToSetting(SettingName.isDarkMode),
+                initialData: [isDarkModelInitial],
+                builder: (context, snapshot) {
+                  final bool isDarkMode =
+                      snapshot.data?.firstOrNull?.value == "true";
 
-              return MaterialApp.router(
-                debugShowCheckedModeBanner: false,
-                locale: DevicePreview.locale(context),
-                builder: DevicePreview.appBuilder,
-                supportedLocales: const [
-                  Locale('ar'),
-                ],
-                localizationsDelegates: const [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                title: 'ليا انا',
-                theme: _buildTheme(isDarkMode),
-                routerConfig: router,
-              );
-            }));
+                  return MaterialApp.router(
+                    debugShowCheckedModeBanner: false,
+                    locale: DevicePreview.locale(context),
+                    builder: DevicePreview.appBuilder,
+                    supportedLocales: const [
+                      Locale('ar'),
+                    ],
+                    localizationsDelegates: const [
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    title: 'ليا انا',
+                    theme: _buildTheme(isDarkMode),
+                    routerConfig: router,
+                  );
+                });
+          },
+        ));
   }
 }

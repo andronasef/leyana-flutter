@@ -26,10 +26,6 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/homepage',
       builder: (BuildContext context, GoRouterState state) {
-        // Load the verse and random god name when the user navigates to the homepage for the first time (Loads the verse and random god name)
-        context.read<VerseCubit>().loadVerse();
-        context.read<GodNameCubit>().loadRandomName();
-
         return const MainScreen();
       },
     ),
