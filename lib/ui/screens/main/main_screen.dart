@@ -46,12 +46,12 @@ class _MainScaffoldState extends State<MainScreen> {
             BottomNavigationBarItem(
               activeIcon: Icon(Icons.article),
               icon: Icon(Icons.article_outlined),
-              label: 'ايه اليوم',
+              label: 'ليك اليوم',
             ),
             BottomNavigationBarItem(
               activeIcon: Icon(Icons.star),
               icon: Icon(Icons.star_outline),
-              label: 'الايات المفضله',
+              label: 'المفضله',
             ),
             BottomNavigationBarItem(
               activeIcon: Icon(Icons.settings),

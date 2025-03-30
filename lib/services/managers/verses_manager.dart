@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
@@ -20,15 +21,11 @@ class VersesManager {
 
     final verse = versesList[randomIndex];
 
-    final praseVerseCurrentUser =
-        await VersesManager.praseVerseCurrentUser(verse);
+    // final praseVerseCurrentUser =
+    //     await VersesManager.praseVerseCurrentUser(verse);
 
-    if (praseVerseCurrentUser == null) {
-      return right(
-          Failure("حدثت مشكلة اثناء تحميل الآية برجاء اعادة تشغيل التطبيق"));
-    }
-
-    return left(praseVerseCurrentUser);
+    // Verse As it is
+    return left(verse);
   }
 
   static Future<VerseDBModel?> praseVerseCurrentUser(
@@ -80,6 +77,7 @@ class VersesManager {
             ..realId = verse["_id"])
           .toList();
     } on Exception catch (e) {
+      dev.log(e.toString());
       return [];
     }
   }

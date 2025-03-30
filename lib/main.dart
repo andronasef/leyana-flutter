@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:leyana/bloc/cubit/god_name/god_name_cubit.dart';
 import 'package:leyana/bloc/cubit/verse/verse_cubit.dart';
 import 'package:leyana/core/values.dart';
 import 'package:leyana/models/setting_db_model.dart';
@@ -62,6 +63,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider<VerseCubit>(
             create: (context) => VerseCubit(),
+          ),
+          BlocProvider<GodNameCubit>(
+            create: (context) => GodNameCubit(),
           ),
         ],
         child: StreamBuilder<List<SettingDBModel>>(

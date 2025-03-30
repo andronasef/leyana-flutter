@@ -1,6 +1,5 @@
 part of 'verse_cubit.dart';
 
-@immutable
 sealed class VerseState {}
 
 final class VerseInitial extends VerseState {}

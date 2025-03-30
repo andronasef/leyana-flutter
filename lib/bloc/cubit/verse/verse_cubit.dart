@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leyana/models/verse_db_model.dart';
 import 'package:leyana/services/managers/verses_manager.dart';
-import 'package:meta/meta.dart';
 
 part 'verse_state.dart';
 

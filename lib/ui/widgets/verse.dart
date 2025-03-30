@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leyana/models/verse_db_model.dart';
 import 'package:leyana/services/managers/favorite_verses_manager.dart';
+import 'package:leyana/services/managers/verses_manager.dart';
 import 'package:leyana/utils/snackbar.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -20,6 +21,23 @@ class Verse extends StatefulWidget {
 }
 
 class _VerseState extends State<Verse> {
+  String parsedVerseText = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final parsedVerseModel =
+          (await VersesManager.praseVerseCurrentUser(widget.verseModel));
+      if (parsedVerseModel == null) return;
+      setState(() {
+        parsedVerseText = parsedVerseModel.verse;
+      });
+    });
+  }
+
   void showVerseDeleteConfirm() {
     showDialog(
       context: context,
@@ -54,7 +72,7 @@ class _VerseState extends State<Verse> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          widget.verseModel.verse,
+          parsedVerseText,
           textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme

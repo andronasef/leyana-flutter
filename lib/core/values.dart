@@ -16,7 +16,7 @@ class AppUrls {
       "حبيت اشارك معاك ابليكشن ليا انا.\nفكره الابليكيشن ببساطة انه بيشاركك معاك ايات الكتاب المقدس بصورة مختلفه انه بيخليها ليه انت مكتوبه باسمك انت / انتي\nوده لينك الابليكشن:$shareGooglePlay";
   static const String support = "https://forms.gle/TkzqvUNQ26TNU33F6";
   static const String privacy =
-      "https://realincrease.github.io/apps-privacy-policy/leyana";
+      "https://increasinglabs.github.io/apps-privacy-policy/leyana";
 
   static get kAppShortname => kAppPackageName;
 }

@@ -40,13 +40,13 @@ class LocalNotifyService {
 
   static Future<bool> requestNotificationsPermissions() async {
     try {
-      final androidPermissons = await (await LocalNotifyService.getInstance())
+      final androidPermissions = await (await LocalNotifyService.getInstance())
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>();
       final notificationPermissionsAccepted =
-          await androidPermissons?.requestNotificationsPermission();
+          await androidPermissions?.requestNotificationsPermission();
       final exactNotificationPermissionsAccepted =
-          await androidPermissons?.requestExactAlarmsPermission();
+          await androidPermissions?.requestExactAlarmsPermission();
 
       final permissionsAccepted = notificationPermissionsAccepted! &&
           exactNotificationPermissionsAccepted!;
