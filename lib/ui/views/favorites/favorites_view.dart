@@ -3,6 +3,7 @@ import 'package:leyana/models/god_name_db_model.dart';
 import 'package:leyana/models/verse_db_model.dart';
 import 'package:leyana/services/managers/favorite_god_names_manager.dart';
 import 'package:leyana/services/managers/favorite_verses_manager.dart';
+import 'package:animations/animations.dart';
 import 'package:leyana/types/content_type.dart';
 import 'package:leyana/ui/widgets/god_name.dart';
 import 'package:leyana/ui/widgets/verse.dart';
@@ -24,7 +25,25 @@ class _FavoritesViewState extends State<FavoritesView> {
       child: Column(
         children: [
           Expanded(
-            child: _buildContentList(),
+            child: PageTransitionSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (
+                Widget child,
+                Animation<double> primaryAnimation,
+                Animation<double> secondaryAnimation,
+              ) {
+                return SharedAxisTransition(
+                  animation: primaryAnimation,
+                  secondaryAnimation: secondaryAnimation,
+                  transitionType: SharedAxisTransitionType.horizontal,
+                  child: child,
+                );
+              },
+              child: Container(
+                key: ValueKey(_selectedType), // Add key here
+                child: _buildContentList(),
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           SingleChildScrollView(
