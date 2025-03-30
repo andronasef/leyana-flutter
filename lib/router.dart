@@ -5,6 +5,7 @@ import 'package:leyana/bloc/cubit/verse/verse_cubit.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
 import 'package:leyana/ui/screens/intro/intro_screen.dart';
 import 'package:leyana/ui/screens/main/main_screen.dart';
+import 'package:leyana/ui/screens/settings/profile_settings_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
@@ -25,6 +26,12 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         context.read<VerseCubit>().loadVerse();
         return const MainScreen();
+      },
+    ),
+    GoRoute(
+      path: '/settings/profile',
+      builder: (BuildContext context, GoRouterState state) {
+        return const ProfileSettingsScreen();
       },
     ),
   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:leyana/core/values.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/services/local_notify_service.dart';
@@ -23,6 +24,23 @@ class SettingsView extends StatelessWidget {
               children: [
                 const SettingsSectionTitle("الاعدادات الرئيسية"),
                 const SizedBox(height: 8),
+                Material(
+                  child: StreamBuilder<List<SettingDBModel>>(
+                    stream: SettingsManager.listenToSetting(SettingName.name),
+                    builder: (context, snapshot) {
+                      final String currentName =
+                          snapshot.data?.firstOrNull?.value ?? "";
+                      return ListTile(
+                        title: Text("معلومات شخصية",
+                            style: Theme.of(context).textTheme.titleMedium),
+                        subtitle: Text(
+                            currentName.isEmpty ? "ادخل اسمك" : currentName),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () => context.push('/settings/profile'),
+                      );
+                    },
+                  ),
+                ),
                 Material(
                   child: StreamBuilder<List<SettingDBModel>>(
                       stream: SettingsManager.listenToSetting(

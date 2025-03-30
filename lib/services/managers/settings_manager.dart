@@ -59,7 +59,24 @@ class SettingsManager {
     }
   }
 
-  static Future<SettingDBModel> getIsDarkModelInitial() async {
+  static Future<void> initializeDefaultSettings() async {
+    // Initialize name if not set
+    final String? name = await getSetting(SettingName.name);
+    if (name == null) {
+      await setSetting(SettingName.name, "");
+    }
+
+    // Initialize gender if not set (default to male)
+    final String? isMale = await getSetting(SettingName.isMale);
+    if (isMale == null) {
+      await setSetting(SettingName.isMale, "true");
+    }
+
+    // Initialize dark mode if not set
+    await _initializeDarkMode();
+  }
+
+  static Future<void> _initializeDarkMode() async {
     final String? isDarkModeInDB =
         await SettingsManager.getSetting(SettingName.isDarkMode);
 
@@ -68,17 +85,20 @@ class SettingsManager {
           WidgetsBinding.instance.platformDispatcher.platformBrightness;
       final bool isSystemDarkMode = systemBrightness == Brightness.dark;
 
-      SettingsManager.setSetting(
+      await SettingsManager.setSetting(
           SettingName.isDarkMode, isSystemDarkMode.toString());
     }
+  }
+
+  static Future<SettingDBModel> getIsDarkModelInitial() async {
+    await initializeDefaultSettings();
+
     final bool isDarkMode =
         await SettingsManager.getSetting(SettingName.isDarkMode) == "true";
 
-    final SettingDBModel isDarkModelInitial = SettingDBModel()
+    return SettingDBModel()
       ..name = SettingName.isDarkMode.toString()
       ..value = isDarkMode.toString();
-
-    return isDarkModelInitial;
   }
 }
 
