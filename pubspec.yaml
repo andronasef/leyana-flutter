@@ -1,9 +1,9 @@
 name: leyana
-description: "A new Flutter project."
+description: ""
 
 publish_to: "none"
 
-version: 1.3.0+6
+version: 1.4.0+7
 
 environment:
   sdk: ">=3.4.3 <4.0.0"
