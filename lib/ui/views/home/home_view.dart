@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leyana/bloc/cubit/blessing/blessing_cubit.dart';
@@ -8,6 +9,10 @@ import 'package:leyana/types/content_type.dart';
 import 'package:leyana/ui/widgets/blessing.dart';
 import 'package:leyana/ui/widgets/verse.dart';
 import 'package:leyana/ui/widgets/god_name.dart';
+import 'package:leyana/ui/widgets/new_feature_indicator.dart';
+import 'package:leyana/ui/widgets/blessings_indicator_debug_info.dart';
+import 'package:leyana/services/blessings_indicator_service.dart';
+import 'package:leyana/core/values.dart';
 import 'package:leyana/utils/snackbar.dart';
 
 class HomeView extends StatefulWidget {
@@ -19,10 +24,35 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   ContentType _selectedType = ContentType.verse;
+  bool _showBlessingsIndicator = false;
 
   @override
   void initState() {
     super.initState();
+    _checkBlessingsIndicator();
+  }
+
+  Future<void> _checkBlessingsIndicator() async {
+    final bool shouldShow =
+        await BlessingsIndicatorService.shouldShowIndicator();
+    if (mounted) {
+      setState(() {
+        _showBlessingsIndicator = shouldShow;
+      });
+    }
+  }
+
+  void _onContentTypeSelected(ContentType type) {
+    setState(() {
+      _selectedType = type;
+    });
+
+    // لو اختار البركات الروحية لأول مرة، يسجل ده
+    if (type == ContentType.blessing && _showBlessingsIndicator) {
+      BlessingsIndicatorService.markBlessingsAsSeen().then((_) {
+        _checkBlessingsIndicator(); // إعادة تحديث الindicator
+      });
+    }
   }
 
   @override
@@ -58,14 +88,20 @@ class _HomeViewState extends State<HomeView> {
               children: ContentType.values.map((type) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: FilterChip(
-                    selected: _selectedType == type,
-                    label: Text(type.label),
-                    onSelected: (selected) {
-                      setState(() {
-                        _selectedType = type;
-                      });
-                    },
+                  child: NewFeatureIndicator(
+                    showIndicator:
+                        type == ContentType.blessing && _showBlessingsIndicator,
+                    tooltipMessage:
+                        type == ContentType.blessing && _showBlessingsIndicator
+                            ? '🌟 ميزة جديدة! اكتشف البركات الروحية الملهمة'
+                            : null,
+                    child: FilterChip(
+                      selected: _selectedType == type,
+                      label: Text(type.label),
+                      onSelected: (selected) {
+                        _onContentTypeSelected(type);
+                      },
+                    ),
                   ),
                 );
               }).toList(),
@@ -85,9 +121,33 @@ class _HomeViewState extends State<HomeView> {
             return const Center(child: CircularProgressIndicator());
           }
           if (state is VerseLoaded) {
-            return Verse(
-              verseModel: state.randomVerse,
-              isFavoriteList: false,
+            return Column(
+              children: [
+                // Debug info في debug mode بس
+                if (kDebugMode && Config.kTestingBlessingsIndicator)
+                  const BlessingsIndicatorDebugInfo(),
+                // Debug button في debug mode بس
+                if (kDebugMode && Config.kTestingBlessingsIndicator)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await BlessingsIndicatorService.resetIndicator();
+                        _checkBlessingsIndicator();
+                        if (mounted) {
+                          showSnackbar(context, 'تم إعادة تعيين مؤشر البركات');
+                        }
+                      },
+                      child: const Text('إعادة تعيين مؤشر البركات (Debug)'),
+                    ),
+                  ),
+                Expanded(
+                  child: Verse(
+                    verseModel: state.randomVerse,
+                    isFavoriteList: false,
+                  ),
+                ),
+              ],
             );
           }
           return const Center(child: Text('حدث خطأ ما'));

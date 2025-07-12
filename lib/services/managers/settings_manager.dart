@@ -94,6 +94,12 @@ class SettingsManager {
     if (hasSharedApp == null) {
       await setSetting(SettingName.hasSharedApp, "false");
     }
+
+    // Initialize blessings first seen date if not set
+    final String? blessingsFirstSeen = await getSetting(SettingName.blessingsFirstSeenDate);
+    if (blessingsFirstSeen == null) {
+      await setSetting(SettingName.blessingsFirstSeenDate, "0");
+    }
   }
 
   static Future<void> _initializeDarkMode() async {
@@ -130,5 +136,6 @@ enum SettingName {
   notificationTime,
   hasSeenSharePopup,
   lastSharePopupPostpone,
-  hasSharedApp
+  hasSharedApp,
+  blessingsFirstSeenDate // جديد: لتتبع أول مرة يشوف البركات
 }

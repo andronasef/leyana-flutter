@@ -6,6 +6,7 @@ const kAppPackageName = "";
 class Config {
   static const kIsDevicePreview = false;
   static const kTestingSharingAppPopup = true;
+  static const kTestingBlessingsIndicator = true; // للاختبار: يظهر الindicator دايماً
 }
 
 class AppUrls {
