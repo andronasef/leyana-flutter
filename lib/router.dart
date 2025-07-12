@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:leyana/bloc/cubit/god_name/god_name_cubit.dart';
 import 'package:leyana/bloc/cubit/verse/verse_cubit.dart';
 import 'package:leyana/services/managers/settings_manager.dart';
+import 'package:leyana/ui/screens/content/blessing_detail_screen.dart';
 import 'package:leyana/ui/screens/content/god_name_detail_screen.dart';
 import 'package:leyana/ui/screens/intro/intro_screen.dart';
 import 'package:leyana/ui/screens/main/main_screen.dart';
@@ -40,6 +41,13 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         final nameId = state.pathParameters['id']!;
         return GodNameDetailScreen(nameId: nameId);
+      },
+    ),
+    GoRoute(
+      path: '/blessing/:id',
+      builder: (BuildContext context, GoRouterState state) {
+        final blessingId = state.pathParameters['id']!;
+        return BlessingDetailScreen(blessingId: blessingId);
       },
     ),
   ],

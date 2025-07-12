@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:leyana/models/blessing_db_model.dart';
 import 'package:leyana/models/god_name_db_model.dart';
 import 'package:leyana/models/verse_db_model.dart';
+import 'package:leyana/services/managers/favorite_blessings_manager.dart';
 import 'package:leyana/services/managers/favorite_god_names_manager.dart';
 import 'package:leyana/services/managers/favorite_verses_manager.dart';
 import 'package:animations/animations.dart';
 import 'package:leyana/types/content_type.dart';
+import 'package:leyana/ui/widgets/blessing.dart';
 import 'package:leyana/ui/widgets/god_name.dart';
 import 'package:leyana/ui/widgets/verse.dart';
 
@@ -75,8 +78,7 @@ class _FavoritesViewState extends State<FavoritesView> {
     return [
       if (_selectedType == ContentType.verse) _buildVerseList(),
       if (_selectedType == ContentType.godName) _buildGodNamesList(),
-      if (_selectedType == ContentType.blessing)
-        const Center(child: Text('بركات روحية قريبا')),
+      if (_selectedType == ContentType.blessing) _buildBlessingsList(),
     ].first;
   }
 
@@ -128,6 +130,34 @@ class _FavoritesViewState extends State<FavoritesView> {
               content: GodName(
                 isFavoriteList: true,
                 godNameModel: names.data![index],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildBlessingsList() {
+    return StreamBuilder<List<BlessingDBModel>>(
+      stream: FavoriteBlessingsManager.listenToFavorites(),
+      builder: (context, blessings) {
+        if (blessings.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (blessings.data == null || blessings.data!.isEmpty) {
+          return const Center(child: Text('لا توجد بركات مفضلة'));
+        }
+
+        return ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
+          itemCount: blessings.data!.length,
+          itemBuilder: (context, index) {
+            return _buildFavoriteCard(
+              content: Blessing(
+                isFavoriteList: true,
+                blessingModel: blessings.data![index],
               ),
             );
           },

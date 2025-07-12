@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:leyana/bloc/cubit/blessing/blessing_cubit.dart';
 import 'package:leyana/bloc/cubit/god_name/god_name_cubit.dart';
 import 'package:leyana/bloc/cubit/verse/verse_cubit.dart';
 import 'package:leyana/core/values.dart';
@@ -68,6 +69,9 @@ class MyApp extends StatelessWidget {
           BlocProvider<GodNameCubit>(
             create: (context) => GodNameCubit(),
           ),
+          BlocProvider<BlessingCubit>(
+            create: (context) => BlessingCubit(),
+          ),
         ],
         child: Builder(
           builder: (context) {
@@ -76,6 +80,7 @@ class MyApp extends StatelessWidget {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 context.read<VerseCubit>().loadVerse();
                 context.read<GodNameCubit>().loadRandomName();
+                context.read<BlessingCubit>().loadRandomBlessing();
               });
             }
             return StreamBuilder<List<SettingDBModel>>(

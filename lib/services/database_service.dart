@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'package:leyana/models/blessing_db_model.dart';
 import 'package:leyana/models/god_name_db_model.dart';
 import 'package:leyana/models/setting_db_model.dart';
 import 'package:leyana/models/verse_db_model.dart';
@@ -10,7 +11,7 @@ class DatabaseService {
   static Future<void> init() async {
     final dir = await getApplicationDocumentsDirectory();
     _instance = await Isar.open(
-        [VerseDBModelSchema, SettingDBModelSchema, GodNameDBModelSchema],
+        [VerseDBModelSchema, SettingDBModelSchema, GodNameDBModelSchema, BlessingDBModelSchema],
         directory: dir.path, inspector: true);
   }
 

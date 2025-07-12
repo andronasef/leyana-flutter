@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:leyana/bloc/cubit/blessing/blessing_cubit.dart';
 import 'package:leyana/bloc/cubit/god_name/god_name_cubit.dart';
 import 'package:leyana/bloc/cubit/verse/verse_cubit.dart';
 import 'package:animations/animations.dart';
 import 'package:leyana/types/content_type.dart';
+import 'package:leyana/ui/widgets/blessing.dart';
 import 'package:leyana/ui/widgets/verse.dart';
 import 'package:leyana/ui/widgets/god_name.dart';
 import 'package:leyana/utils/snackbar.dart';
@@ -111,6 +113,25 @@ class _HomeViewState extends State<HomeView> {
         },
         listener: (context, state) {
           if (state is GodNameError) {
+            showSnackbar(context, state.message);
+          }
+        },
+      );
+    } else if (_selectedType == ContentType.blessing) {
+      return BlocConsumer<BlessingCubit, BlessingState>(
+        builder: (context, state) {
+          if (state is BlessingLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is BlessingLoaded) {
+            return Blessing(
+              blessingModel: state.blessing,
+            );
+          }
+          return const Center(child: Text('حدث خطأ ما'));
+        },
+        listener: (context, state) {
+          if (state is BlessingError) {
             showSnackbar(context, state.message);
           }
         },
