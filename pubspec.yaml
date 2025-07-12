@@ -36,6 +36,7 @@ dependencies:
   flutter_exit_app: ^1.1.4
   go_router: ^14.2.7
   flutter_markdown: ^0.7.6+2
+  clarity_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

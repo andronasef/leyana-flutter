@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +23,12 @@ void main() async {
   final SettingDBModel isDarkModelInitial =
       await SettingsManager.getIsDarkModelInitial();
 
+  final clarityConfig = ClarityConfig(
+      projectId: "sdqark6t1c",
+      logLevel: LogLevel
+          .None // Note: Use "LogLevel.Verbose" value while testing to debug initialization issues.
+      );
+
   final Directory directory = (await getDownloadsDirectory())!;
   logger.i("Directory Path: ${directory.path}");
   runApp(DevicePreview(
@@ -33,8 +39,11 @@ void main() async {
           multipleScreenshots: true,
           onScreenshot: screenshotAsFiles(directory)),
     ],
-    builder: (context) => MyApp(
-      isDarkModelInitial: isDarkModelInitial,
+    builder: (context) => ClarityWidget(
+      clarityConfig: clarityConfig,
+      app: MyApp(
+        isDarkModelInitial: isDarkModelInitial,
+      ),
     ),
   ));
 }
