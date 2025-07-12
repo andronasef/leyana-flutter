@@ -59,20 +59,18 @@ class GodNameDetailScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_back_ios),
-                                onPressed: () => context.pop(),
-                              ),
-                              Text(
-                                godName.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios),
+                            onPressed: () => context.pop(),
+                          ),
+                          Flexible(
+                            child: Text(
+                              godName.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
