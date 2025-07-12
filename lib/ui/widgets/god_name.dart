@@ -97,7 +97,8 @@ class GodName extends StatelessWidget {
                   if (isFavoriteList) {
                     _showDeleteConfirm(context);
                   } else {
-                    FavoriteGodNamesManager.toggleFavorite(godNameModel);
+                    FavoriteGodNamesManager.toggleFavorite(
+                        godNameModel, context);
                   }
                 },
                 icon: isFavoriteList

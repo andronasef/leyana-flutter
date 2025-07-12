@@ -74,6 +74,26 @@ class SettingsManager {
 
     // Initialize dark mode if not set
     await _initializeDarkMode();
+
+    // Initialize share popup setting if not set
+    final String? hasSeenSharePopup =
+        await getSetting(SettingName.hasSeenSharePopup);
+    if (hasSeenSharePopup == null) {
+      await setSetting(SettingName.hasSeenSharePopup, "false");
+    }
+
+    // Initialize last postpone date if not set
+    final String? lastPostpone =
+        await getSetting(SettingName.lastSharePopupPostpone);
+    if (lastPostpone == null) {
+      await setSetting(SettingName.lastSharePopupPostpone, "0");
+    }
+
+    // Initialize has shared app setting if not set
+    final String? hasSharedApp = await getSetting(SettingName.hasSharedApp);
+    if (hasSharedApp == null) {
+      await setSetting(SettingName.hasSharedApp, "false");
+    }
   }
 
   static Future<void> _initializeDarkMode() async {
@@ -102,4 +122,13 @@ class SettingsManager {
   }
 }
 
-enum SettingName { isIntroDone, name, isMale, isDarkMode, notificationTime }
+enum SettingName {
+  isIntroDone,
+  name,
+  isMale,
+  isDarkMode,
+  notificationTime,
+  hasSeenSharePopup,
+  lastSharePopupPostpone,
+  hasSharedApp
+}

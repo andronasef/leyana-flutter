@@ -5,6 +5,7 @@ const kAppPackageName = "";
 
 class Config {
   static const kIsDevicePreview = false;
+  static const kTestingSharingAppPopup = true;
 }
 
 class AppUrls {

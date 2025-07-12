@@ -10,9 +10,12 @@ class DatabaseService {
 
   static Future<void> init() async {
     final dir = await getApplicationDocumentsDirectory();
-    _instance = await Isar.open(
-        [VerseDBModelSchema, SettingDBModelSchema, GodNameDBModelSchema, BlessingDBModelSchema],
-        directory: dir.path, inspector: true);
+    _instance = await Isar.open([
+      VerseDBModelSchema,
+      SettingDBModelSchema,
+      GodNameDBModelSchema,
+      BlessingDBModelSchema
+    ], directory: dir.path, inspector: true);
   }
 
   static Future<Isar> getInstance() async {

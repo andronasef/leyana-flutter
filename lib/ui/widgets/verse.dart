@@ -96,7 +96,7 @@ class _VerseState extends State<Verse> {
                 if (widget.isFavoriteList) {
                   showVerseDeleteConfirm();
                 } else {
-                  FavoriteVersesManager.toggleVerse(widget.verseModel);
+                  FavoriteVersesManager.toggleVerse(widget.verseModel, context);
                 }
               },
               icon: widget.isFavoriteList

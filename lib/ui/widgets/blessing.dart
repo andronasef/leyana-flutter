@@ -99,7 +99,8 @@ class Blessing extends StatelessWidget {
                   if (isFavoriteList) {
                     _showDeleteConfirm(context);
                   } else {
-                    FavoriteBlessingsManager.toggleFavorite(blessingModel);
+                    FavoriteBlessingsManager.toggleFavorite(
+                        blessingModel, context);
                   }
                 },
                 icon: isFavoriteList

@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:leyana/models/blessing_db_model.dart';
 import 'package:leyana/services/database_service.dart';
+import 'package:leyana/services/share_popup_service.dart';
 
 class FavoriteBlessingsManager {
   static Stream<List<BlessingDBModel>> listenToFavorites() async* {
@@ -11,7 +13,8 @@ class FavoriteBlessingsManager {
         .watch(fireImmediately: true);
   }
 
-  static void toggleFavorite(BlessingDBModel model) async {
+  static void toggleFavorite(BlessingDBModel model,
+      [BuildContext? context]) async {
     if (!(await DatabaseService.getInstance()).isOpen) return;
 
     if (await (await DatabaseService.getInstance())
@@ -24,6 +27,10 @@ class FavoriteBlessingsManager {
       deleteFavorite(model);
     } else {
       addFavorite(model);
+      // Show popup when adding to favorites
+      if (context != null && context.mounted) {
+        SharePopupService.onFavoriteAdded(context);
+      }
     }
   }
 

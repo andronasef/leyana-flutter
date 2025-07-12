@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:leyana/models/verse_db_model.dart';
 import 'package:leyana/services/database_service.dart';
+import 'package:leyana/services/share_popup_service.dart';
 
 class FavoriteVersesManager {
   static Stream<List<VerseDBModel>> listenToVerses() async* {
@@ -11,7 +13,8 @@ class FavoriteVersesManager {
         .watch(fireImmediately: true);
   }
 
-  static void toggleVerse(VerseDBModel verseDBModel) async {
+  static void toggleVerse(VerseDBModel verseDBModel,
+      [BuildContext? context]) async {
     if (!(await DatabaseService.getInstance()).isOpen) return;
 
     if (await (await DatabaseService.getInstance())
@@ -24,6 +27,10 @@ class FavoriteVersesManager {
       deleteFavoriteVerse(verseDBModel);
     } else {
       addFavoriteVerse(verseDBModel);
+      // Show popup when adding to favorites
+      if (context != null && context.mounted) {
+        SharePopupService.onFavoriteAdded(context);
+      }
     }
   }
 
